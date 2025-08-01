@@ -19,6 +19,7 @@
   <link rel="canonical" href="https://oripovsski.github.io/sv/">
   <link rel="sitemap" type="application/xml" title="Sitemap" href="https://oripovsski.github.io/sv/sitemap.xml">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script src="data.js"></script>
   <style>
     * {
       margin: 0;
@@ -718,6 +719,7 @@
       <div class="admin-tabs">
         <button class="admin-tab active" onclick="showAdminTab('pending')">Pending Posts</button>
         <button class="admin-tab" onclick="showAdminTab('comments')">Pending Comments</button>
+        <button class="admin-tab" onclick="showAdminTab('users')">User Management</button>
         <button class="admin-tab" onclick="showAdminTab('stats')">Statistics</button>
       </div>
       <div id="adminContent">
@@ -795,63 +797,14 @@
     let currentUser = null;
     let isAdmin = false;
 
-    // Admin credentials
-    const ADMIN_EMAIL = 'oripovdzhakhongir@gmail.com';
-    const ADMIN_PASSWORD = 'jaha2010!';
+    // Get data from persistent storage
+    function getPosts() {
+      return window.dataManager.getPosts();
+    }
 
-    // Sample users (in a real app, this would be in a database)
-    let users = [
-      {
-        email: 'oripovdzhakhongir@gmail.com',
-        password: 'jaha2010!',
-        isAdmin: true,
-        name: 'Admin'
-      },
-      {
-        email: 'pochomulloevasumaiiakhon@gmail.com',
-        password: 'Rumon2010',
-        isAdmin: true,
-        name: 'Moderator'
-      }
-    ];
-
-    // Sample data (in a real app, this would come from a database)
-    let posts = [
-      {
-        id: 1,
-        content: "I feel overwhelmed by everything lately. I just needed to say it somewhere.",
-        author: "Anonymous",
-        time: "2 hours ago",
-        likes: 5,
-        approved: true,
-        comments: [
-          {
-            id: 1,
-            content: "You're not alone. Take it one step at a time. Sending you strength! 💜",
-            author: "Support",
-            time: "1 hour ago",
-            approved: true
-          }
-        ]
-      },
-      {
-        id: 2,
-        content: "It's hard to talk to my family about how I feel. I wish they understood.",
-        author: "Anonymous",
-        time: "4 hours ago",
-        likes: 3,
-        approved: true,
-        comments: [
-          {
-            id: 2,
-            content: "Sometimes it's easier to write than to speak. We hear you. 💜",
-            author: "Support",
-            time: "3 hours ago",
-            approved: true
-          }
-        ]
-      }
-    ];
+    function getUsers() {
+      return window.dataManager.getUsers();
+    }
 
     // Language switching function
     function changeLanguage(lang) {
@@ -926,6 +879,7 @@
 
     function displayPosts() {
       const container = document.getElementById('postsContainer');
+      const posts = getPosts();
       
       const approvedPosts = posts.filter(post => post.approved !== false);
       
@@ -980,16 +934,15 @@
       if (!content) return;
 
       const newPost = {
-        id: Date.now(),
         content: content,
         author: currentUser ? currentUser.name : "Anonymous",
-        time: "Just now",
+        authorId: currentUser ? currentUser.id : null,
         likes: 0,
         comments: [],
         approved: false // Posts need approval
       };
 
-      posts.unshift(newPost);
+      window.dataManager.addPost(newPost);
       displayPosts();
       updateStats();
       
@@ -1009,6 +962,7 @@
     }
 
     function addComment(postId) {
+      const posts = getPosts();
       const post = posts.find(p => p.id === postId);
       if (!post) return;
 
@@ -1019,14 +973,13 @@
       if (!content) return;
 
       const newComment = {
-        id: Date.now(),
         content: content,
         author: currentUser ? currentUser.name : "Support",
-        time: "Just now",
+        authorId: currentUser ? currentUser.id : null,
         approved: false // Comments need approval
       };
 
-      post.comments.push(newComment);
+      window.dataManager.addComment(postId, newComment);
       displayPosts();
       updateStats();
       
@@ -1077,12 +1030,11 @@
     }
 
     function updateStats() {
-      const totalPosts = posts.length;
-      const totalComments = posts.reduce((sum, post) => sum + post.comments.length, 0);
+      const stats = window.dataManager.getStats();
       const totalSupporters = Math.floor(Math.random() * 50) + 100; // Simulated data
       
-      document.getElementById('totalPosts').textContent = totalPosts;
-      document.getElementById('totalComments').textContent = totalComments;
+      document.getElementById('totalPosts').textContent = stats.totalPosts;
+      document.getElementById('totalComments').textContent = stats.totalComments;
       document.getElementById('totalSupporters').textContent = totalSupporters;
     }
 
@@ -1131,6 +1083,7 @@
           return;
         }
         
+        const users = getUsers();
         // Check if user already exists
         if (users.find(u => u.email === email)) {
           showNotification('User already exists!', 'error');
@@ -1138,13 +1091,14 @@
         }
 
         // Create new user
-        users.push({
+        const newUser = {
           email: email,
           password: password,
           isAdmin: false,
           name: email.split('@')[0]
-        });
+        };
 
+        window.dataManager.addUser(newUser);
         showNotification('Account created successfully!', 'success');
         closeAuthModal();
         loginUser(email, password);
@@ -1154,7 +1108,7 @@
     }
 
     function loginUser(email, password) {
-      const user = users.find(u => u.email === email && u.password === password);
+      const user = window.dataManager.findUser(email, password);
       
       if (user) {
         currentUser = user;
@@ -1223,6 +1177,9 @@
       event.target.classList.add('active');
 
       const content = document.getElementById('adminContent');
+      const posts = getPosts();
+      const users = getUsers();
+      const stats = window.dataManager.getStats();
       
       if (tab === 'pending') {
         content.innerHTML = `
@@ -1245,11 +1202,13 @@
       } else if (tab === 'comments') {
         const pendingComments = [];
         posts.forEach(post => {
-          post.comments.forEach(comment => {
-            if (!comment.approved) {
-              pendingComments.push({...comment, postId: post.id});
-            }
-          });
+          if (post.comments) {
+            post.comments.forEach(comment => {
+              if (!comment.approved) {
+                pendingComments.push({...comment, postId: post.id});
+              }
+            });
+          }
         });
         
         content.innerHTML = `
@@ -1269,24 +1228,56 @@
             </div>
           `).join('') || '<p>No pending comments</p>'}
         `;
+      } else if (tab === 'users') {
+        content.innerHTML = `
+          <h3>User Management (${users.length} users)</h3>
+          <div style="margin-bottom: 20px;">
+            <button class="btn btn-primary" onclick="exportData()">
+              <i class="fas fa-download"></i> Export Data
+            </button>
+            <button class="btn btn-secondary" onclick="importData()" style="margin-left: 10px;">
+              <i class="fas fa-upload"></i> Import Data
+            </button>
+          </div>
+          ${users.map(user => `
+            <div class="moderation-item">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong>${user.name}</strong> (${user.email})
+                  <br><small>${user.isAdmin ? 'Admin' : 'User'} - ID: ${user.id}</small>
+                </div>
+                <div class="moderation-actions">
+                  ${!user.isAdmin ? `
+                    <button class="btn btn-approve" onclick="makeAdmin(${user.id})">
+                      <i class="fas fa-user-shield"></i> Make Admin
+                    </button>
+                  ` : ''}
+                  <button class="btn btn-reject" onclick="deleteUser(${user.id})">
+                    <i class="fas fa-trash"></i> Delete User
+                  </button>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        `;
       } else if (tab === 'stats') {
         content.innerHTML = `
           <h3>Site Statistics</h3>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
             <div class="stat">
-              <div class="stat-number">${posts.length}</div>
+              <div class="stat-number">${stats.totalPosts}</div>
               <div class="stat-label">Total Posts</div>
             </div>
             <div class="stat">
-              <div class="stat-number">${posts.reduce((sum, p) => sum + p.comments.length, 0)}</div>
+              <div class="stat-number">${stats.totalComments}</div>
               <div class="stat-label">Total Comments</div>
             </div>
             <div class="stat">
-              <div class="stat-number">${users.length}</div>
+              <div class="stat-number">${stats.totalUsers}</div>
               <div class="stat-label">Registered Users</div>
             </div>
             <div class="stat">
-              <div class="stat-number">${posts.filter(p => !p.approved).length}</div>
+              <div class="stat-number">${stats.pendingPosts}</div>
               <div class="stat-label">Pending Posts</div>
             </div>
           </div>
@@ -1295,9 +1286,8 @@
     }
 
     function approvePost(postId) {
-      const post = posts.find(p => p.id === postId);
-      if (post) {
-        post.approved = true;
+      const result = window.dataManager.updatePost(postId, { approved: true });
+      if (result) {
         showNotification('Post approved!', 'success');
         showAdminTab('pending');
         displayPosts();
@@ -1305,33 +1295,83 @@
     }
 
     function rejectPost(postId) {
-      posts = posts.filter(p => p.id !== postId);
+      window.dataManager.deletePost(postId);
       showNotification('Post rejected and removed!', 'success');
       showAdminTab('pending');
       displayPosts();
     }
 
     function approveComment(postId, commentId) {
-      const post = posts.find(p => p.id === postId);
-      if (post) {
-        const comment = post.comments.find(c => c.id === commentId);
-        if (comment) {
-          comment.approved = true;
-          showNotification('Comment approved!', 'success');
-          showAdminTab('comments');
-          displayPosts();
-        }
+      const result = window.dataManager.updateComment(postId, commentId, { approved: true });
+      if (result) {
+        showNotification('Comment approved!', 'success');
+        showAdminTab('comments');
+        displayPosts();
       }
     }
 
     function rejectComment(postId, commentId) {
-      const post = posts.find(p => p.id === postId);
-      if (post) {
-        post.comments = post.comments.filter(c => c.id !== commentId);
-        showNotification('Comment rejected and removed!', 'success');
-        showAdminTab('comments');
-        displayPosts();
+      window.dataManager.deleteComment(postId, commentId);
+      showNotification('Comment rejected and removed!', 'success');
+      showAdminTab('comments');
+      displayPosts();
+    }
+
+    function deleteUser(userId) {
+      if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+        window.dataManager.deleteUser(userId);
+        showNotification('User deleted successfully!', 'success');
+        showAdminTab('users');
       }
+    }
+
+    function makeAdmin(userId) {
+      const users = getUsers();
+      const user = users.find(u => u.id === userId);
+      if (user) {
+        user.isAdmin = true;
+        window.dataManager.saveUsers(users);
+        showNotification('User promoted to admin!', 'success');
+        showAdminTab('users');
+      }
+    }
+
+    function exportData() {
+      const data = window.dataManager.exportData();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `silent-voice-backup-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showNotification('Data exported successfully!', 'success');
+    }
+
+    function importData() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            try {
+              const data = JSON.parse(e.target.result);
+              window.dataManager.importData(data);
+              showNotification('Data imported successfully!', 'success');
+              showAdminTab('users');
+              displayPosts();
+              updateStats();
+            } catch (error) {
+              showNotification('Error importing data!', 'error');
+            }
+          };
+          reader.readAsText(file);
+        }
+      };
+      input.click();
     }
 
     function addInteractiveFeatures() {
