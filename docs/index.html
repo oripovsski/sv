@@ -9,7 +9,15 @@
   <meta property="og:title" content="Silent Voice – Anonymous Support Community">
   <meta property="og:description" content="A space where you can speak without speaking, be heard without saying a word, and find support without revealing your identity.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://oripovsski.github.io/sv/">
+  <meta property="og:image" content="https://oripovsski.github.io/sv/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Silent Voice – Anonymous Support Community">
+  <meta name="twitter:description" content="A safe, anonymous space to share your thoughts, find support, and connect with others.">
+  <meta name="twitter:image" content="https://oripovsski.github.io/sv/og-image.png">
   <meta name="theme-color" content="#7c3aed">
+  <link rel="canonical" href="https://oripovsski.github.io/sv/">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="https://oripovsski.github.io/sv/sitemap.xml">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     * {
@@ -30,6 +38,43 @@
       max-width: 800px;
       margin: 0 auto;
       padding: 20px;
+    }
+
+    .language-switcher {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .lang-btn {
+      padding: 8px 16px;
+      border: 2px solid rgba(124, 58, 237, 0.2);
+      background: rgba(124, 58, 237, 0.1);
+      color: #7c3aed;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .lang-btn.active {
+      background: #7c3aed;
+      color: white;
+      border-color: #7c3aed;
+    }
+
+    .lang-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
     }
 
     .header {
@@ -361,24 +406,34 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1><i class="fas fa-heart"></i> Silent Voice</h1>
-      <div class="subtitle">A safe, anonymous space to share your feelings and support others.<br>Your voice matters — even in silence.</div>
-      <div class="stats">
-        <div class="stat">
-          <div class="stat-number" id="totalPosts">0</div>
-          <div class="stat-label">Posts</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number" id="totalComments">0</div>
-          <div class="stat-label">Comments</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number" id="totalSupporters">0</div>
-          <div class="stat-label">Supporters</div>
-        </div>
+      <div class="container">
+      <!-- Language Switcher -->
+      <div class="language-switcher">
+        <button class="lang-btn active" onclick="changeLanguage('en')" data-lang="en">
+          <i class="fas fa-globe"></i> English
+        </button>
+        <button class="lang-btn" onclick="changeLanguage('ru')" data-lang="ru">
+          <i class="fas fa-globe"></i> Русский
+        </button>
       </div>
+      
+      <div class="header">
+        <h1><i class="fas fa-heart"></i> <span data-translate="title">Silent Voice</span></h1>
+        <div class="subtitle" data-translate="subtitle">A safe, anonymous space to share your feelings and support others.<br>Your voice matters — even in silence.</div>
+              <div class="stats">
+          <div class="stat">
+            <div class="stat-number" id="totalPosts">0</div>
+            <div class="stat-label" data-translate="posts">Posts</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number" id="totalComments">0</div>
+            <div class="stat-label" data-translate="comments">Comments</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number" id="totalSupporters">0</div>
+            <div class="stat-label" data-translate="supporters">Supporters</div>
+          </div>
+        </div>
     </div>
 
     <div class="moderation-notice">
@@ -454,6 +509,72 @@
   </div>
 
   <script>
+    // Language translations
+    const translations = {
+      en: {
+        title: "Silent Voice",
+        subtitle: "A safe, anonymous space to share your feelings and support others. Your voice matters — even in silence.",
+        shareFeelings: "Share Your Feelings",
+        yourMessage: "Your Message (Anonymous)",
+        sharePlaceholder: "Share what's on your mind... You can talk about anxiety, sadness, loneliness, stress, relationships, or anything else. This is a safe space.",
+        shareAnonymously: "Share Anonymously",
+        recentPosts: "Recent Posts",
+        refresh: "Refresh",
+        loadingPosts: "Loading posts...",
+        noPostsYet: "No posts yet. Be the first to share!",
+        writeComment: "Write a supportive comment...",
+        sendSupport: "Send Support",
+        moderation: "Moderation: All posts and comments are reviewed by a moderator to ensure a safe, supportive environment. Harmful or abusive content will be removed.",
+        howItHelps: "How Silent Voice Helps",
+        anonymousSharing: "Anonymous Sharing",
+        anonymousSharingDesc: "Share your thoughts without revealing your identity",
+        supportiveCommunity: "Supportive Community",
+        supportiveCommunityDesc: "Receive kind words and support from others",
+        safeEnvironment: "Safe Environment",
+        safeEnvironmentDesc: "All content is moderated for your safety",
+        noJudgment: "No Judgment",
+        noJudgmentDesc: "Express yourself freely without fear",
+        posts: "Posts",
+        comments: "Comments",
+        supporters: "Supporters",
+        postShared: "Your post has been shared anonymously!",
+        footer: "This site is for support and community only. If you are in crisis, please seek professional help.",
+        madeWith: "Made with love for everyone who needs to be heard."
+      },
+      ru: {
+        title: "Тихий Голос",
+        subtitle: "Безопасное анонимное пространство для выражения чувств и поддержки других. Ваш голос важен — даже в тишине.",
+        shareFeelings: "Поделитесь своими чувствами",
+        yourMessage: "Ваше сообщение (Анонимно)",
+        sharePlaceholder: "Поделитесь тем, что у вас на душе... Вы можете говорить о тревоге, грусти, одиночестве, стрессе, отношениях или о чем-либо другом. Это безопасное пространство.",
+        shareAnonymously: "Поделиться анонимно",
+        recentPosts: "Недавние посты",
+        refresh: "Обновить",
+        loadingPosts: "Загрузка постов...",
+        noPostsYet: "Пока нет постов. Будьте первым, кто поделится!",
+        writeComment: "Напишите поддерживающий комментарий...",
+        sendSupport: "Отправить поддержку",
+        moderation: "Модерация: Все посты и комментарии проверяются модератором для обеспечения безопасной и поддерживающей среды. Вредоносный или оскорбительный контент будет удален.",
+        howItHelps: "Как помогает Тихий Голос",
+        anonymousSharing: "Анонимное общение",
+        anonymousSharingDesc: "Делитесь мыслями, не раскрывая свою личность",
+        supportiveCommunity: "Поддерживающее сообщество",
+        supportiveCommunityDesc: "Получайте добрые слова и поддержку от других",
+        safeEnvironment: "Безопасная среда",
+        safeEnvironmentDesc: "Весь контент модерируется для вашей безопасности",
+        noJudgment: "Без осуждения",
+        noJudgmentDesc: "Выражайтесь свободно без страха",
+        posts: "Посты",
+        comments: "Комментарии",
+        supporters: "Поддерживающие",
+        postShared: "Ваш пост был опубликован анонимно!",
+        footer: "Этот сайт предназначен только для поддержки и сообщества. Если вы в кризисе, пожалуйста, обратитесь за профессиональной помощью.",
+        madeWith: "Создано с любовью для всех, кто нуждается в том, чтобы быть услышанным."
+      }
+    };
+
+    let currentLanguage = 'en';
+
     // Sample data (in a real app, this would come from a database)
     let posts = [
       {
@@ -488,6 +609,58 @@
       }
     ];
 
+    // Language switching function
+    function changeLanguage(lang) {
+      currentLanguage = lang;
+      
+      // Update language buttons
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
+      
+      // Update all translatable elements
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+      
+      // Update placeholders and other text
+      const postContent = document.getElementById('postContent');
+      if (postContent) {
+        postContent.placeholder = translations[lang].sharePlaceholder;
+      }
+      
+      // Update form labels
+      const formLabel = document.querySelector('.form-label');
+      if (formLabel) {
+        formLabel.textContent = translations[lang].yourMessage;
+      }
+      
+      // Update buttons
+      const shareBtn = document.querySelector('.btn-primary');
+      if (shareBtn) {
+        shareBtn.innerHTML = `<i class="fas fa-paper-plane"></i> ${translations[lang].shareAnonymously}`;
+      }
+      
+      // Update moderation notice
+      const moderationNotice = document.querySelector('.moderation-notice');
+      if (moderationNotice) {
+        moderationNotice.innerHTML = `<i class="fas fa-shield-alt"></i> <strong>${translations[lang].moderation.split(':')[0]}:</strong> ${translations[lang].moderation.split(':')[1]}`;
+      }
+      
+      // Update footer
+      const footer = document.querySelector('.footer');
+      if (footer) {
+        footer.innerHTML = `&copy; 2024 ${translations[lang].title}. ${translations[lang].footer}<br><span style="font-size:0.9em;">${translations[lang].madeWith}</span>`;
+      }
+      
+      // Redisplay posts with new language
+      displayPosts();
+    }
+
     // Initialize the app
     document.addEventListener('DOMContentLoaded', function() {
       displayPosts();
@@ -498,6 +671,9 @@
         e.preventDefault();
         createPost();
       });
+      
+      // Add more interactive features
+      addInteractiveFeatures();
     });
 
     function displayPosts() {
@@ -653,6 +829,79 @@
       document.getElementById('totalPosts').textContent = totalPosts;
       document.getElementById('totalComments').textContent = totalComments;
       document.getElementById('totalSupporters').textContent = totalSupporters;
+    }
+
+    function addInteractiveFeatures() {
+      // Add keyboard shortcuts
+      document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'Enter') {
+          // Ctrl+Enter to submit post
+          const postForm = document.getElementById('postForm');
+          if (postForm) {
+            createPost();
+          }
+        }
+        if (e.key === 'Escape') {
+          // Escape to close comment forms
+          document.querySelectorAll('.comment-form.active').forEach(form => {
+            form.classList.remove('active');
+          });
+        }
+      });
+
+      // Add smooth scrolling
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+
+      // Add copy to clipboard functionality
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('copy-btn')) {
+          const text = e.target.getAttribute('data-text');
+          navigator.clipboard.writeText(text).then(() => {
+            showNotification('Copied to clipboard!', 'success');
+          });
+        }
+      });
+
+      // Add notification system
+      window.showNotification = function(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        notification.style.cssText = `
+          position: fixed;
+          top: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: ${type === 'success' ? '#10b981' : '#7c3aed'};
+          color: white;
+          padding: 15px 25px;
+          border-radius: 8px;
+          z-index: 10000;
+          animation: slideIn 0.3s ease;
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.remove();
+        }, 3000);
+      };
+
+      // Add CSS animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes slideIn {
+          from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+          to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+      `;
+      document.head.appendChild(style);
     }
   </script>
 </body>
