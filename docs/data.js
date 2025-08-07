@@ -87,10 +87,8 @@ class DataManager {
       localStorage.setItem('silentVoiceChat', JSON.stringify(defaultChat));
     }
 
-    // Initialize maintenance mode
-    if (!localStorage.getItem('silentVoiceMaintenance')) {
-      localStorage.setItem('silentVoiceMaintenance', 'false');
-    }
+    // Initialize maintenance mode - always start with it disabled
+    localStorage.setItem('silentVoiceMaintenance', 'false');
 
     // Initialize current user session
     if (!localStorage.getItem('silentVoiceCurrentUser')) {

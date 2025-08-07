@@ -807,8 +807,13 @@
 
     // Check maintenance mode on load
     function checkMaintenanceMode() {
+      // Force disable maintenance mode for now
+      window.dataManager.setMaintenanceMode(false);
+      
       if (window.dataManager.isMaintenanceMode()) {
         document.getElementById('maintenanceOverlay').style.display = 'flex';
+      } else {
+        document.getElementById('maintenanceOverlay').style.display = 'none';
       }
     }
 
@@ -821,68 +826,7 @@
         updateAuthButtons();
         showNotification(`Welcome back, ${savedUser.name}!`, 'success');
       }
-    }
-      en: {
-        title: "Silent Voice",
-        subtitle: "A safe, anonymous space to share your feelings and support others. Your voice matters — even in silence.",
-        shareFeelings: "Share Your Feelings",
-        yourMessage: "Your Message (Anonymous)",
-        sharePlaceholder: "Share what's on your mind... You can talk about anxiety, sadness, loneliness, stress, relationships, or anything else. This is a safe space.",
-        shareAnonymously: "Share Anonymously",
-        recentPosts: "Recent Posts",
-        refresh: "Refresh",
-        loadingPosts: "Loading posts...",
-        noPostsYet: "No posts yet. Be the first to share!",
-        writeComment: "Write a supportive comment...",
-        sendSupport: "Send Support",
-        moderation: "Moderation: All posts and comments are reviewed by a moderator to ensure a safe, supportive environment. Harmful or abusive content will be removed.",
-        howItHelps: "How Silent Voice Helps",
-        anonymousSharing: "Anonymous Sharing",
-        anonymousSharingDesc: "Share your thoughts without revealing your identity",
-        supportiveCommunity: "Supportive Community",
-        supportiveCommunityDesc: "Receive kind words and support from others",
-        safeEnvironment: "Safe Environment",
-        safeEnvironmentDesc: "All content is moderated for your safety",
-        noJudgment: "No Judgment",
-        noJudgmentDesc: "Express yourself freely without fear",
-        posts: "Posts",
-        comments: "Comments",
-        supporters: "Supporters",
-        postShared: "Your post has been shared anonymously!",
-        footer: "This site is for support and community only. If you are in crisis, please seek professional help.",
-        madeWith: "Made with love for everyone who needs to be heard."
-      },
-      ru: {
-        title: "Тихий Голос",
-        subtitle: "Безопасное анонимное пространство для выражения чувств и поддержки других. Ваш голос важен — даже в тишине.",
-        shareFeelings: "Поделитесь своими чувствами",
-        yourMessage: "Ваше сообщение (Анонимно)",
-        sharePlaceholder: "Поделитесь тем, что у вас на душе... Вы можете говорить о тревоге, грусти, одиночестве, стрессе, отношениях или о чем-либо другом. Это безопасное пространство.",
-        shareAnonymously: "Поделиться анонимно",
-        recentPosts: "Недавние посты",
-        refresh: "Обновить",
-        loadingPosts: "Загрузка постов...",
-        noPostsYet: "Пока нет постов. Будьте первым, кто поделится!",
-        writeComment: "Напишите поддерживающий комментарий...",
-        sendSupport: "Отправить поддержку",
-        moderation: "Модерация: Все посты и комментарии проверяются модератором для обеспечения безопасной и поддерживающей среды. Вредоносный или оскорбительный контент будет удален.",
-        howItHelps: "Как помогает Тихий Голос",
-        anonymousSharing: "Анонимное общение",
-        anonymousSharingDesc: "Делитесь мыслями, не раскрывая свою личность",
-        supportiveCommunity: "Поддерживающее сообщество",
-        supportiveCommunityDesc: "Получайте добрые слова и поддержку от других",
-        safeEnvironment: "Безопасная среда",
-        safeEnvironmentDesc: "Весь контент модерируется для вашей безопасности",
-        noJudgment: "Без осуждения",
-        noJudgmentDesc: "Выражайтесь свободно без страха",
-        posts: "Посты",
-        comments: "Комментарии",
-        supporters: "Поддерживающие",
-        postShared: "Ваш пост был опубликован анонимно!",
-        footer: "Этот сайт предназначен только для поддержки и сообщества. Если вы в кризисе, пожалуйста, обратитесь за профессиональной помощью.",
-        madeWith: "Создано с любовью для всех, кто нуждается в том, чтобы быть услышанным."
-      }
-    };
+
 
     let currentLanguage = 'en';
     let currentUser = null;
