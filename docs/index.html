@@ -730,7 +730,7 @@
         <button class="admin-tab active" onclick="showAdminTab('pending')" data-translate="pendingPosts">Pending Posts</button>
         <button class="admin-tab" onclick="showAdminTab('comments')" data-translate="pendingComments">Pending Comments</button>
         <button class="admin-tab" onclick="showAdminTab('users')" data-translate="userManagement">User Management</button>
-        <button class="admin-tab" onclick="showAdminTab('maintenance')" data-translate="maintenanceMode">Maintenance</button>
+        
         <button class="admin-tab" onclick="showAdminTab('stats')" data-translate="statistics">Statistics</button>
       </div>
       <div id="adminContent">
@@ -1549,27 +1549,7 @@
             </div>
           `).join('')}
         `;
-      } else if (tab === 'maintenance') {
-        const isMaintenance = window.dataManager.isMaintenanceMode();
-        content.innerHTML = `
-          <h3>${window.translations[currentLanguage].maintenanceMode}</h3>
-          <div style="margin-bottom: 20px;">
-            <p>Current Status: <strong>${isMaintenance ? 'ENABLED' : 'DISABLED'}</strong></p>
-            <button class="btn ${isMaintenance ? 'btn-approve' : 'btn-reject'}" onclick="toggleMaintenanceMode()">
-              <i class="fas fa-${isMaintenance ? 'play' : 'pause'}"></i> 
-              ${isMaintenance ? window.translations[currentLanguage].disableMaintenance : window.translations[currentLanguage].enableMaintenance}
-            </button>
-          </div>
-          <div class="moderation-item">
-            <h4>Support Chat Messages</h4>
-            ${window.dataManager.getChatMessages().map(msg => `
-              <div style="margin-bottom: 10px; padding: 10px; background: #f9fafb; border-radius: 8px;">
-                <strong>${msg.author}</strong> - ${msg.time}
-                <p>${msg.message}</p>
-              </div>
-            `).join('')}
-          </div>
-        `;
+
       } else if (tab === 'stats') {
         content.innerHTML = `
           <h3>${window.translations[currentLanguage].statistics}</h3>

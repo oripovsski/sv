@@ -59,7 +59,7 @@ const translations = {
     sendMessage: "Send Message",
     typeMessage: "Type your message...",
     chatPlaceholder: "Need help? Ask our support team...",
-    chatClosed: "Chat is currently closed for maintenance.",
+
     adminResponse: "Admin Response",
     
     // User Profile
@@ -71,12 +71,7 @@ const translations = {
     profileUpdated: "Profile updated successfully!",
     
     // Website Status
-    maintenanceMode: "Maintenance Mode",
-    siteMaintenance: "Site is under maintenance. Please check back later.",
-    enableMaintenance: "Enable Maintenance Mode",
-    disableMaintenance: "Disable Maintenance Mode",
-    maintenanceEnabled: "Maintenance mode enabled!",
-    maintenanceDisabled: "Maintenance mode disabled!",
+
     
     // Features
     howItHelps: "How Silent Voice Helps",
@@ -183,12 +178,7 @@ const translations = {
     profileUpdated: "Профиль успешно обновлен!",
     
     // Website Status
-    maintenanceMode: "Режим обслуживания",
-    siteMaintenance: "Сайт находится на техническом обслуживании. Пожалуйста, зайдите позже.",
-    enableMaintenance: "Включить режим обслуживания",
-    disableMaintenance: "Отключить режим обслуживания",
-    maintenanceEnabled: "Режим обслуживания включен!",
-    maintenanceDisabled: "Режим обслуживания отключен!",
+
     
     // Features
     howItHelps: "Как помогает Тихий Голос",

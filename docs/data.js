@@ -87,8 +87,7 @@ class DataManager {
       localStorage.setItem('silentVoiceChat', JSON.stringify(defaultChat));
     }
 
-    // Initialize maintenance mode - always start with it disabled
-    localStorage.setItem('silentVoiceMaintenance', 'false');
+
 
     // Initialize current user session
     if (!localStorage.getItem('silentVoiceCurrentUser')) {
@@ -247,14 +246,7 @@ class DataManager {
     return message;
   }
 
-  // Maintenance Mode
-  isMaintenanceMode() {
-    return localStorage.getItem('silentVoiceMaintenance') === 'true';
-  }
 
-  setMaintenanceMode(enabled) {
-    localStorage.setItem('silentVoiceMaintenance', enabled.toString());
-  }
 
   // User Session Management
   saveCurrentUser(user) {
@@ -288,7 +280,7 @@ class DataManager {
       users: this.getUsers(),
       posts: this.getPosts(),
       chat: this.getChatMessages(),
-      maintenance: this.isMaintenanceMode(),
+
       exportDate: new Date().toISOString()
     };
   }
@@ -303,9 +295,7 @@ class DataManager {
     if (data.chat) {
       localStorage.setItem('silentVoiceChat', JSON.stringify(data.chat));
     }
-    if (data.maintenance !== undefined) {
-      this.setMaintenanceMode(data.maintenance);
-    }
+
   }
 }
 
