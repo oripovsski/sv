@@ -13,14 +13,16 @@ class DataManager {
           password: 'jaha2010!',
           isAdmin: true,
           name: 'Admin',
-          id: 1
+          id: 1,
+          profilePicture: null
         },
         {
           email: 'pochomulloevasumaiiakhon@gmail.com',
           password: 'Rumon2010',
           isAdmin: true,
           name: 'Moderator',
-          id: 2
+          id: 2,
+          profilePicture: null
         }
       ];
       localStorage.setItem('silentVoiceUsers', JSON.stringify(defaultUsers));
@@ -68,6 +70,31 @@ class DataManager {
         }
       ];
       localStorage.setItem('silentVoicePosts', JSON.stringify(defaultPosts));
+    }
+
+    // Initialize support chat
+    if (!localStorage.getItem('silentVoiceChat')) {
+      const defaultChat = [
+        {
+          id: 1,
+          message: "Welcome to Silent Voice Support! How can we help you today?",
+          author: "Support Team",
+          authorId: null,
+          time: this.getTimeAgo(new Date()),
+          isAdmin: true
+        }
+      ];
+      localStorage.setItem('silentVoiceChat', JSON.stringify(defaultChat));
+    }
+
+    // Initialize maintenance mode
+    if (!localStorage.getItem('silentVoiceMaintenance')) {
+      localStorage.setItem('silentVoiceMaintenance', 'false');
+    }
+
+    // Initialize current user session
+    if (!localStorage.getItem('silentVoiceCurrentUser')) {
+      localStorage.setItem('silentVoiceCurrentUser', 'null');
     }
   }
 
@@ -204,11 +231,66 @@ class DataManager {
     };
   }
 
+  // Support Chat Management
+  getChatMessages() {
+    return JSON.parse(localStorage.getItem('silentVoiceChat') || '[]');
+  }
+
+  saveChatMessages(messages) {
+    localStorage.setItem('silentVoiceChat', JSON.stringify(messages));
+  }
+
+  addChatMessage(message) {
+    const messages = this.getChatMessages();
+    message.id = Date.now();
+    message.time = this.getTimeAgo(new Date());
+    messages.push(message);
+    this.saveChatMessages(messages);
+    return message;
+  }
+
+  // Maintenance Mode
+  isMaintenanceMode() {
+    return localStorage.getItem('silentVoiceMaintenance') === 'true';
+  }
+
+  setMaintenanceMode(enabled) {
+    localStorage.setItem('silentVoiceMaintenance', enabled.toString());
+  }
+
+  // User Session Management
+  saveCurrentUser(user) {
+    localStorage.setItem('silentVoiceCurrentUser', JSON.stringify(user));
+  }
+
+  getCurrentUser() {
+    const user = localStorage.getItem('silentVoiceCurrentUser');
+    return user ? JSON.parse(user) : null;
+  }
+
+  clearCurrentUser() {
+    localStorage.setItem('silentVoiceCurrentUser', 'null');
+  }
+
+  // User Profile Management
+  updateUserProfile(userId, updates) {
+    const users = this.getUsers();
+    const userIndex = users.findIndex(u => u.id === userId);
+    if (userIndex !== -1) {
+      users[userIndex] = { ...users[userIndex], ...updates };
+      this.saveUsers(users);
+      return users[userIndex];
+    }
+    return null;
+  }
+
   // Export/Import for backup
   exportData() {
     return {
       users: this.getUsers(),
       posts: this.getPosts(),
+      chat: this.getChatMessages(),
+      maintenance: this.isMaintenanceMode(),
       exportDate: new Date().toISOString()
     };
   }
@@ -219,6 +301,12 @@ class DataManager {
     }
     if (data.posts) {
       localStorage.setItem('silentVoicePosts', JSON.stringify(data.posts));
+    }
+    if (data.chat) {
+      localStorage.setItem('silentVoiceChat', JSON.stringify(data.chat));
+    }
+    if (data.maintenance !== undefined) {
+      this.setMaintenanceMode(data.maintenance);
     }
   }
 }

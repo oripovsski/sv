@@ -20,6 +20,7 @@
   <link rel="sitemap" type="application/xml" title="Sitemap" href="https://oripovsski.github.io/sv/sitemap.xml">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <script src="data.js"></script>
+  <script src="languages.js"></script>
   <style>
     * {
       margin: 0;
@@ -583,6 +584,12 @@
         <button class="auth-btn" onclick="showAuthModal('signup')" id="signupBtn">
           <i class="fas fa-user-plus"></i> <span data-translate="signup">Sign Up</span>
         </button>
+        <button class="auth-btn" onclick="showProfileModal()" id="profileBtn" style="display: none;">
+          <i class="fas fa-user"></i> <span data-translate="profile">Profile</span>
+        </button>
+        <button class="auth-btn" onclick="showSupportChat()" id="supportBtn">
+          <i class="fas fa-comments"></i> <span data-translate="supportChat">Support</span>
+        </button>
         <button class="auth-btn admin-btn" onclick="showAdminPanel()" id="adminBtn" style="display: none;">
           <i class="fas fa-shield-alt"></i> <span data-translate="admin">Admin</span>
         </button>
@@ -714,17 +721,71 @@
     <div class="admin-panel">
       <span class="close" onclick="closeAdminModal()">&times;</span>
       <div class="modal-header">
-        <div class="modal-title">Admin Panel - Moderation</div>
+        <div class="modal-title" data-translate="adminPanel">Admin Panel - Moderation</div>
       </div>
       <div class="admin-tabs">
-        <button class="admin-tab active" onclick="showAdminTab('pending')">Pending Posts</button>
-        <button class="admin-tab" onclick="showAdminTab('comments')">Pending Comments</button>
-        <button class="admin-tab" onclick="showAdminTab('users')">User Management</button>
-        <button class="admin-tab" onclick="showAdminTab('stats')">Statistics</button>
+        <button class="admin-tab active" onclick="showAdminTab('pending')" data-translate="pendingPosts">Pending Posts</button>
+        <button class="admin-tab" onclick="showAdminTab('comments')" data-translate="pendingComments">Pending Comments</button>
+        <button class="admin-tab" onclick="showAdminTab('users')" data-translate="userManagement">User Management</button>
+        <button class="admin-tab" onclick="showAdminTab('maintenance')" data-translate="maintenanceMode">Maintenance</button>
+        <button class="admin-tab" onclick="showAdminTab('stats')" data-translate="statistics">Statistics</button>
       </div>
       <div id="adminContent">
         <!-- Content will be loaded here -->
       </div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeProfileModal()">&times;</span>
+      <div class="modal-header">
+        <div class="modal-title" data-translate="editProfile">Edit Profile</div>
+      </div>
+      <form id="profileForm">
+        <div class="form-group">
+          <label class="form-label" data-translate="profileName">Display Name</label>
+          <input type="text" class="form-input" id="profileName" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-translate="profilePicture">Profile Picture URL</label>
+          <input type="url" class="form-input" id="profilePicture" placeholder="https://example.com/image.jpg">
+        </div>
+        <button type="submit" class="btn btn-primary" data-translate-btn="saveProfile">
+          <i class="fas fa-save"></i> Save Profile
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Support Chat Modal -->
+  <div id="chatModal" class="modal">
+    <div class="modal-content" style="max-width: 600px; height: 80vh;">
+      <span class="close" onclick="closeChatModal()">&times;</span>
+      <div class="modal-header">
+        <div class="modal-title" data-translate="supportChat">Support Chat</div>
+      </div>
+      <div id="chatMessages" style="height: 400px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; margin-bottom: 15px; background: #f9fafb;">
+        <!-- Chat messages will appear here -->
+      </div>
+      <form id="chatForm">
+        <div class="form-group">
+          <input type="text" class="form-input" id="chatInput" data-translate="typeMessage" placeholder="Type your message..." required>
+        </div>
+        <button type="submit" class="btn btn-primary" data-translate-btn="sendMessage">
+          <i class="fas fa-paper-plane"></i> Send Message
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Maintenance Mode Overlay -->
+  <div id="maintenanceOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+    <div style="text-align: center; color: white; padding: 40px;">
+      <i class="fas fa-tools" style="font-size: 4rem; margin-bottom: 20px;"></i>
+      <h1 data-translate="maintenanceMode">Maintenance Mode</h1>
+      <p data-translate="siteMaintenance">Site is under maintenance. Please check back later.</p>
     </div>
   </div>
 
