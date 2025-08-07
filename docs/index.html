@@ -16,11 +16,14 @@
   <meta name="twitter:description" content="A safe, anonymous space to share your thoughts, find support, and connect with others.">
   <meta name="twitter:image" content="https://oripovsski.github.io/sv/og-image.png">
   <meta name="theme-color" content="#7c3aed">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <link rel="canonical" href="https://oripovsski.github.io/sv/">
   <link rel="sitemap" type="application/xml" title="Sitemap" href="https://oripovsski.github.io/sv/sitemap.xml">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <script src="data.js"></script>
-  <script src="languages.js"></script>
+  <script src="data.js?v=2"></script>
+  <script src="languages.js?v=2"></script>
   <style>
     * {
       margin: 0;
@@ -807,13 +810,14 @@
 
     // Check maintenance mode on load
     function checkMaintenanceMode() {
-      // Force disable maintenance mode for now
+      // Force disable maintenance mode completely
       window.dataManager.setMaintenanceMode(false);
+      localStorage.setItem('silentVoiceMaintenance', 'false');
       
-      if (window.dataManager.isMaintenanceMode()) {
-        document.getElementById('maintenanceOverlay').style.display = 'flex';
-      } else {
-        document.getElementById('maintenanceOverlay').style.display = 'none';
+      // Always hide the maintenance overlay
+      const overlay = document.getElementById('maintenanceOverlay');
+      if (overlay) {
+        overlay.style.display = 'none';
       }
     }
 
