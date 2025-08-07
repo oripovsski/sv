@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://oripovsski.github.io/sv/sitemap.xml 
+Sitemap: https://silent-voice.com/sitemap.xml 
