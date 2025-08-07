@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Silent Voice Test</title>
+  <script src="data.js?v=4"></script>
+  <script src="languages.js?v=4"></script>
+</head>
+<body>
+  <h1>Silent Voice Test</h1>
+  <div id="test"></div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const testDiv = document.getElementById('test');
+      
+      // Test if dataManager is working
+      if (window.dataManager) {
+        testDiv.innerHTML += '<p>✅ DataManager is working</p>';
+        
+        // Test if we can get posts
+        const posts = window.dataManager.getPosts();
+        testDiv.innerHTML += `<p>✅ Posts loaded: ${posts.length}</p>`;
+        
+        // Test if we can get users
+        const users = window.dataManager.getUsers();
+        testDiv.innerHTML += `<p>✅ Users loaded: ${users.length}</p>`;
+        
+        // Test if translations work
+        if (window.translations) {
+          testDiv.innerHTML += '<p>✅ Translations loaded</p>';
+          testDiv.innerHTML += `<p>Title in English: ${window.translations.en.title}</p>`;
+        } else {
+          testDiv.innerHTML += '<p>❌ Translations not loaded</p>';
+        }
+        
+      } else {
+        testDiv.innerHTML += '<p>❌ DataManager not found</p>';
+      }
+    });
+  </script>
+</body>
+</html> 
