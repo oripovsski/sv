@@ -492,6 +492,9 @@
 
       // Update UI based on login status
       updateUI();
+      
+      // Don't automatically show admin panel on page load
+      // Admin must manually click the "Admin Panel" button
     });
 
     function createPost() {
@@ -1027,7 +1030,7 @@
         closeAdminModal();
         updateUI();
         showNotification('Admin login successful!');
-        showAdminPanel();
+        // Don't automatically show admin panel - let admin click the button
       } else {
         showNotification('Invalid admin credentials!', 'error');
       }
