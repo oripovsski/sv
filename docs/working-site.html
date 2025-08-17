@@ -454,7 +454,7 @@
     let posts = JSON.parse(localStorage.getItem('silentVoicePosts') || '[]');
     let users = JSON.parse(localStorage.getItem('silentVoiceUsers') || '[]');
     let currentUser = null;
-    let isAdmin = false;
+    let isAdmin = false; // Always start as false, no persistent admin state
 
     // Admin credentials
     const adminCredentials = [
@@ -464,6 +464,10 @@
 
     // Initialize
     document.addEventListener('DOMContentLoaded', function() {
+      // Clear any persistent admin state on page load
+      localStorage.removeItem('silentVoiceAdmin');
+      isAdmin = false;
+      
       displayPosts();
       updateStats();
       
@@ -768,6 +772,8 @@
     function logout() {
       currentUser = null;
       isAdmin = false;
+      // Clear any admin state from localStorage
+      localStorage.removeItem('silentVoiceAdmin');
       updateUI();
       showNotification('Logged out successfully!');
     }
