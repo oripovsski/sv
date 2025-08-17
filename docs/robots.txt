@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://silent-voice.com/sitemap.xml 
+Sitemap: https://silent-voice.netlify.app/sitemap.xml 
