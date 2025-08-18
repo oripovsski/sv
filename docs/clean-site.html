@@ -330,8 +330,9 @@
   </div>
 
   <script>
-    // Simple data storage
-    let posts = JSON.parse(localStorage.getItem('silentVoicePosts') || '[]');
+    // Simple data storage - Clear all data
+    let posts = [];
+    localStorage.removeItem('silentVoicePosts');
 
     // Initialize
     document.addEventListener('DOMContentLoaded', function() {
